@@ -13,7 +13,7 @@ q_num=q2(1:56,1);
 xlab=q_num; 
 rel_risk=double.empty; 
 
-for j=6%1:6
+for j=5%:6
     for i=1:length(q_num)-1
         q_char=(q_num{i}) ;
         indx1=find(strcmp(q1(:),q_char)==1); 
@@ -33,6 +33,7 @@ for j=6%1:6
         qlabel2(i,1)=qlabel(in,1); 
     end  
     rel_risk3=rel_risk2; 
+    rawOR=flipud(rel_risk3); 
 %     T=rel_risk2; 
 %     indx=find(isinf(T)==1); 
 %     T(indx)=-1; 
@@ -55,6 +56,7 @@ for j=6%1:6
         %rel_risk2(indx2,i)=maxv(i); 
     end 
     log_rel_risk=log2(rel_risk2);
+    normOR=flipud(log_rel_risk); 
     for i=1:r
         temp=log_rel_risk(i,:); 
         minv=min(temp); 
@@ -62,9 +64,9 @@ for j=6%1:6
         log_rel_risk(i,indx3)=minv; 
     end 
     %qqplot_figs(mat, [ years{j} '_log.png']); 
-    cg2=clustergram(log_rel_risk,'ColumnLabels',qlabel(:,1),'RowLabels', qlabel2,'Cluster',2, 'Colormap','jet', 'DisplayRange',3); %'RowLabels',qlabel2(:,1),
-    %fig2=plot(cg2); 
-    %tightfig;
-    %print (gcf, '-dmeta', [years{j} '_clustergram_OR.emf']); 
+    cg2=clustergram(log_rel_risk,'ColumnLabels',qlabel(:,1),'Cluster',2, 'Colormap','jet', 'DisplayRange',3); %'RowLabels',qlabel2(:,1),
+%     fig2=plot(cg2); 
+%     %tightfig;
+%     print (gcf, '-depsc2', [years{j} '_clustergram_OR']); 
    % cg3=clustergram(rel_risk2, 'ColumnLabels',qlabel(:,1),'Cluster',2, 'Colormap','jet', 'DisplayRange',3, 'Symmetric','true');
 end 

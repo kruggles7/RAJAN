@@ -4,9 +4,13 @@ graph=1;
 % reads all the text files in the folder 'binary_NaN_files' and saves them in an array called files
 % make sure that folder contains only the NaN files for the questions you want to run create_hm_graph for
 
-cd controls  
+cd .. 
 weight=importdata('weight.txt','\t'); 
+cd percent_hm_graph_weights
 cd ..
+cd ..
+cd parsed_questions_111413
+cd NaN
 
 %%%question 3-----------------------------------------------
 q3_mat=importdata('Q08--NaN.txt', '\t');
@@ -77,4 +81,4 @@ legend ('Been in a fight at school', 'Been hit by boyfriend or girlfriend', 'Bee
 xlabel('Year', 'FontSize',12); 
 ylabel('% of Respondents Answering Positively', 'FontSize',12);  
 set (gca, 'FontSize',12); 
-print (gcf,'-dmeta', 'Fig2d.emf' );
+print (gcf,'-depsc2', 'Fig2d' );

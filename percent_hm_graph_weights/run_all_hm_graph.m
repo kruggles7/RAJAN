@@ -5,7 +5,7 @@ files=dir(fullfile('C:','Users','Kelly','Documents','MATLAB', 'rajan', 'nan_resu
 % reads all the text files in the folder 'binary_NaN_files' and saves them in an array called files
 % make sure that folder contains only the NaN files for the questions you want to run create_hm_graph for
 N=length(files);
-for i=2 %1:N
+for i=8%1:N
     cd .. 
     cd ..
     cd nan_results

@@ -211,6 +211,8 @@ if (heatmap==1)
     else 
         M=25; 
     end 
+    
+    M=25; 
     %get rid of deimals
     per_mat_map=per_mat_map*10; 
     per_mat_map=round(per_mat_map); 
@@ -219,7 +221,7 @@ if (heatmap==1)
 	[hImage]=heatmap_rb(per_mat_map, label_year, label_cell2, 1, M, 0, 'Colormap','money', 'UseLogColormap', false, 'ShowAllTicks',true, 'Colorbar',true,'TextColor','k', 'FontSize', 12); 
     %title (title1, 'FontSize', 12); 
 	set (gca, 'FontSize',12); 
-	print (gcf,'-dmeta', [ filename '_heatmap.emf'] );  %can make pdf, jnp, or jpg 
+	print (gcf,'-depsc2', [ filename '_heatmap'] );  %can make pdf, jnp, or jpg 
 end
 
 
