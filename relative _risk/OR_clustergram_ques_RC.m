@@ -1,8 +1,8 @@
 %make heatmaps out of the relative risk matrix 
 
 cd matrices
-load rel_risk_RC_111413.mat
-load q_labels.mat
+load rel_risk_RC_010414.mat
+load q_labels_010414.mat
 cd ..
 xlab={'2001', '2003', '2005', '2007', '2009', '2011'}; 
 
@@ -25,7 +25,7 @@ for i=1:80
                 s=q2{p,1}; 
                 q2_{p,1}=s(2:3); 
             end  
-            plot_mat=plot_mat(1:55,:); 
+            plot_mat=plot_mat(1:56,:); 
             plot_mat=rot90(plot_mat);
             [r,c]=size(plot_mat); 
             plot_mat2=plot_mat;
