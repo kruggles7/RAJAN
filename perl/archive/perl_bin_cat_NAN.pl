@@ -6,7 +6,8 @@
 use strict;
 
 my $counter=0;
-my $directory='results_061514'; 
+my $directory=".";
+if ($ARGV[0]=~/\w/){$directory=$ARGV[0];}else {print "ERROR IN FILE";}
 mkdir "$directory/cat"; 
 opendir (DIR, "$directory") or die; #where the binary files are
 my @files = readdir DIR; #creates an array 'files' with he names of all the files in that folder

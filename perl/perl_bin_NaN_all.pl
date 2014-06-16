@@ -6,22 +6,23 @@
 use strict;
 
 my $counter=0;
-my $directory='results_061514'; 
-mkdir "$directory/cat"; 
+my $directory="results_061514";
+
 opendir (DIR, "$directory") or die; #where the binary files are
 my @files = readdir DIR; #creates an array 'files' with he names of all the files in that folder
 close DIR;
+mkdir "$directory/NaN"; 
 
 foreach my $filename(@files) #now goes through each binary file
 {
 
-	if($filename!~/binary.txt$/ && $filename!~/log/ && $filename=~/Q/) #makes sure it didnt pick up anything else, only want the binary files
+	if($filename=~/binary.txt$/) #makes sure it didnt pick up anything else, only want the binary files
 	{
 		open (IN, "<$directory/$filename") or die "can't open file";
-		$filename=~s/.txt$//;  #takes out 'binary.txt' from the filename (so now it looks like "Q1-")
+		$filename=~s/binary.txt$//;  #takes out 'binary.txt' from the filename (so now it looks like "Q1-")
 		
 		# Now create a new file called Q1--NaN and specify where youw ant it to go:
-		open (OUT, ">$directory/cat/$filename-cat-NaN.txt") or die "cant create file";
+		open (OUT, ">$directory/NaN/$filename-NaN.txt") or die "cant create file";
 		while (my $line=<IN>)
 		{
 			while ($line=~s/^([^\t]*)\t//)
