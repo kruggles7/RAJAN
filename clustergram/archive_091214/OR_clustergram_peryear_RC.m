@@ -3,8 +3,8 @@ years={'2001', '2003', '2005', '2007', '2009', '2011'};
 cd ..
 cd ..
 cd matrices
-load rel_risk_RC_010414.mat 
-load qlabel_090914.mat
+load relative_risk_RC_010414.mat 
+load q_labels_010414.mat
 load order.mat
 cd ..
 
@@ -27,8 +27,8 @@ for j=6
         end 
     end 
     [r,c]=size(rel_risk); 
-    rel_risk2=zeros(r-1,c);
-    qlabel2=cell(r-1,1); 
+    rel_risk2=zeros(r,c);
+    qlabel2=cell(r,1); 
     for i=1:length(order); 
         in=order(i); 
         rel_risk2(i,:)=rel_risk(in,:); %reorder by group
@@ -41,7 +41,7 @@ for j=6
 %     T(indx)=-1; 
 %     maxv=max(max(T)); 
 %     rel_risk2(indx)=maxv; 
-    for i=1:r-1
+    for i=1:r
         temp_mat=rel_risk2(i,:); 
         noinf=temp_mat; 
         indx=find(isinf(noinf)==1); 
@@ -51,7 +51,6 @@ for j=6
         rel_risk2(i,:)=temp_mat; 
     end 
     [r,c]=size(rel_risk2);
-    %med=median(rel_risk_2,2); 
     for i=1:r
         med=median(rel_risk2(i,:)); 
         rel_risk2(i,:)=rel_risk2(i,:)/med; 
@@ -60,7 +59,6 @@ for j=6
     end 
     log_rel_risk=log2(rel_risk2);
     normOR=flipud(log_rel_risk); 
-    qlab=qlabel(1:55,1);
     for i=1:r
         temp=log_rel_risk(i,:); 
         minv=min(temp); 
@@ -68,8 +66,7 @@ for j=6
         log_rel_risk(i,indx3)=minv; 
     end 
     %qqplot_figs(mat, [ years{j} '_log.png']); 
-    names=flipud(qlabel2); 
-    cg2=clustergram(log_rel_risk,'ColumnLabels',qlab,'Cluster',2, 'Colormap','jet', 'DisplayRange',3); %'RowLabels',qlabel2(:,1),
+    cg2=clustergram(log_rel_risk,'ColumnLabels',qlabel(:,1),'Cluster',2, 'Colormap','jet', 'DisplayRange',3); %'RowLabels',qlabel2(:,1),
 %     fig2=plot(cg2); 
 %     %tightfig;
 %     print (gcf, '-depsc2', [years{j} '_clustergram_OR']); 

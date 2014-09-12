@@ -8,7 +8,7 @@ cd cat
 index_yes=double.empty; 
 
 questions={'Q79', 'Q27', 'Q29', 'Q25', 'Q32', 'Q31' }; 
-labels={'Prescription Drugs', 'Heroin', 'Methamphetamine', 'Cocaine',  'Ecstasy', 'Injected'}; 
+labels={'Prescription Drugs', 'Heroin', 'Methamphetamine', 'Cocaine',  'Ecstasy', 'Injection Drugs'}; 
 P=length(questions);
 total=double.empty; 
 for n=1:P
@@ -47,6 +47,7 @@ end
 bar (percent, 'stacked'); 
 ylim([0 1]); 
 set(gca, 'xticklabel', labels); 
+set(gca, 'FontSize', 12); 
 legend('1 or 2 times','3 to 9 times', '10 to 19 times', '20 to 39 times', '40 or more times', 'Location','EastOutside' );  
 
 cd ..
@@ -55,7 +56,7 @@ cd ..
 cd programs
 cd prescriptiondrugs
 cd results
-saveas (gca, 'PO_drugs_frequency_percentage.fig'); 
+saveas (gcf, 'PO_drugs_frequency_percentage.fig'); 
 close 
 
  
@@ -69,7 +70,8 @@ end
 
 bar(index_yes,'stacked'); 
 set(gca, 'xticklabel', labels); 
-set(gca, 'xticklabel', labels); 
+%set(gca, 'xticklabel', labels); 
+rotateXLabels( gca(), 45)
 legend('1 or 2 times','3 to 9 times', '10 to 19 times', '20 to 39 times', '40 or more times', 'Location','NorthEast' );  
 ylabel('Number of participants surveyed'); 
 saveas (gca, 'PO_drugs_frequency.fig'); 
@@ -77,8 +79,10 @@ close
 
 bar(freq,'stacked'); 
 set(gca, 'xticklabel', labels); 
-set(gca, 'xticklabel', labels); 
+rotateXLabels( gca(), 45)
+%set(gca, 'xticklabel', labels); 
 legend('1 or 2 times','3 to 9 times', '10 to 19 times', '20 to 39 times', '40 or more times', 'Location','NorthEast' ); 
-ylabel('Percent of participants surveyed'); 
-saveas (gca, 'PO_drugs_frequency_total.fig'); 
+ylabel('Percent of participants surveyed', 'FontSize', 12); 
+set(gca, 'FontSize', 12); 
+saveas (gcf, 'PO_drugs_frequency_total.fig'); 
 

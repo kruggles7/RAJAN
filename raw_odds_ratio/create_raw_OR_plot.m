@@ -1,5 +1,6 @@
 %make heatmaps out of the relative risk matrix 
-
+cd .. 
+cd .. 
 cd matrices
 load rel_risk_RC_010414.mat
 load q_labels_010414.mat
@@ -39,6 +40,7 @@ for i=1:80
             end  
             plot_mat=plot_mat(1:55,:); 
             plot_mat=rot90(plot_mat);
+            plot_mat=flipud(plot_mat); 
             indx=find(isinf(plot_mat(1,:))==0); 
             plot_mat2=plot_mat(:,indx); 
             qlabel2=qlabel(indx,:); 
@@ -61,6 +63,7 @@ for i=1:80
             end 
             hold off
             set(gca,'XTick', [2001 2003 2005 2007 2009 2011]); 
+            xlim([2001 2011]); 
         end 
         %close 
     end 

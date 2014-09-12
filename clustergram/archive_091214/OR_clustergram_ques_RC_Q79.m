@@ -1,14 +1,12 @@
 %make heatmaps out of the relative risk matrix 
 
-cd .. 
-cd .. 
 cd matrices
-load rel_risk_RC_010414.mat
-load q_labels_010414.mat
+load OR_79_20
+load qlabel_031214
 cd ..
-xlab={'2001', '2003', '2005', '2007', '2009', '2011'}; 
-
-ques=input ('Enter in the question number you want to use (ex. Q01): ', 's'); 
+xlab={ '2009', '2011'}; 
+odds_ratio_cell=OR_79; 
+ques='Q79'; 
 for i=1:80
     i_char=num2str(i); 
     q1_=i_char; 
@@ -20,14 +18,13 @@ for i=1:80
     if strcmp(q1,ques)==1
         indx=find (strcmp(odds_ratio_cell(:,1),q1)==1); 
         if isempty(indx)==0
-            plot_mat=cell2mat(odds_ratio_cell(indx,3:8)); 
+            plot_mat=cell2mat(odds_ratio_cell(indx,3:4)); 
             q2=odds_ratio_cell(indx,2);
             q2_=cell(length(q2)-1,1); 
             for p=1:length(q2)-1
                 s=q2{p,1}; 
                 q2_{p,1}=s(2:3); 
             end  
-            plot_mat=plot_mat(1:56,:); 
             plot_mat=rot90(plot_mat);
             [r,c]=size(plot_mat); 
             plot_mat2=plot_mat;
@@ -55,15 +52,11 @@ for i=1:80
                 log_rel_risk(j,indx3)=minv; 
             end 
             xlab=fliplr(xlab); 
-            %log_rel_risk=flipud(log_rel_risk); 
             %qqplot_figs(log_rel_risk, [ q1 '_log']); 
-            %cg=clustergram(log_rel_risk,'Cluster',2, 'Colormap','jet', 'DisplayRange',3, 'Symmetric','true'); 
-            
             cg=clustergram(log_rel_risk,'RowLabels', xlab, 'ColumnLabels',qlabel(:,1),'Cluster',2, 'Colormap','jet', 'DisplayRange',3, 'Symmetric','true'); 
-            %fig=plot(cg); 
-            %tightfig; 
-            %print (gcf,'-dpng',[q1 '_clustermap_OR_RC_LOG.png']); 
-            %saveas(gcf,[q1 '_clustermap_OR_RC_LOG.fig']); 
+    %         fig=plot(cg); 
+    %         tightfig; 
+    %         print (gcf,'-dmeta',[q1 '_clustermap_OR_RC_LOG.emf']); 
     %         cg=clustergram(plot_mat,'RowLabels',qlabel, 'ColumnLabels', xlab, 'ColorMap', 'jet'); 
     %         fig=plot(cg); 
     %         tightfig; 

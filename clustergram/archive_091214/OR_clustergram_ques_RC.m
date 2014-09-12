@@ -55,15 +55,12 @@ for i=1:80
                 log_rel_risk(j,indx3)=minv; 
             end 
             xlab=fliplr(xlab); 
-            %log_rel_risk=flipud(log_rel_risk); 
             %qqplot_figs(log_rel_risk, [ q1 '_log']); 
-            %cg=clustergram(log_rel_risk,'Cluster',2, 'Colormap','jet', 'DisplayRange',3, 'Symmetric','true'); 
-            
             cg=clustergram(log_rel_risk,'RowLabels', xlab, 'ColumnLabels',qlabel(:,1),'Cluster',2, 'Colormap','jet', 'DisplayRange',3, 'Symmetric','true'); 
-            %fig=plot(cg); 
-            %tightfig; 
-            %print (gcf,'-dpng',[q1 '_clustermap_OR_RC_LOG.png']); 
-            %saveas(gcf,[q1 '_clustermap_OR_RC_LOG.fig']); 
+            fig=plot(cg); 
+            tightfig; 
+            print (gcf,'-dpng',[q1 '_clustermap_OR_RC_LOG.png']); 
+            saveas(gcf,[q1 '_clustermap_OR_RC_LOG.fig']); 
     %         cg=clustergram(plot_mat,'RowLabels',qlabel, 'ColumnLabels', xlab, 'ColorMap', 'jet'); 
     %         fig=plot(cg); 
     %         tightfig; 
