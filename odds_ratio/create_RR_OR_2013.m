@@ -12,14 +12,14 @@
 
 k=1; %counter for rows in rel_risk_cell and odds_ratio_cell
 
-files1=dir(fullfile('C:','Users','kruggles7','Documents','MATLAB', 'CDC', 'data','results_061514','NaN', '*.txt'));
+files1=dir(fullfile('C:','Users','rugglk01','Dropbox (Personal)','CDC','data','results_091614','NaN', '*.txt'));
 cd ..
 cd ..
 cd matrices
 load reverse_code.mat
 cd ..
 cd data
-cd results_061514
+cd results_091614
 cd NaN
 
 P=length(files1);
@@ -43,7 +43,7 @@ for p=1:P
     q1_RC=reverse_code(ct,1); 
     
     %filename2
-    files2=dir(fullfile('C:','Users','kruggles7','Documents','MATLAB', 'Rajan', 'relative_risk_final','NaN_results_010314', '*.txt'));
+   files2=dir(fullfile('C:','Users','rugglk01','Dropbox (Personal)','CDC','data','results_091614','NaN', '*.txt'));
 	N=length(files2);
 	for n=1:N
 		quest_2=importdata(files2(n).name, '\t');
@@ -84,8 +84,8 @@ for p=1:P
                 indx2=find(year2==y); 
                 if numel(indx1)>0 && numel(indx2)>0 %both in the matrix
                     year_final(counter,1)=y; 
-                    quest_1F(counter,:)=quest_1(indx1,:); 
-                    quest_2F(counter,:)=quest_2(indx2,:); 
+                    quest_1F(counter,:)=quest_1(indx1,2:c1); 
+                    quest_2F(counter,:)=quest_2(indx2,2:c2); 
                     e=ii; 
                     if (counter==1)
                         s=ii; 
@@ -141,22 +141,22 @@ for p=1:P
                 c=total_yes1_no2(i);
                 b=total_no1_yes2(i);
 
-				%formula for relative risk:
-                RR= ( a/(a+b) ) / ( c/(c+d) );
-
-                P1= a/(a+b);
-                P2= c/(c+d);
+% 				%formula for relative risk:
+%                 RR= ( a/(a+b) ) / ( c/(c+d) );
+% 
+%                 P1= a/(a+b);
+%                 P2= c/(c+d);
 				
 				%formula for odds ratio:
-				OR= ( P1/(1-P1) ) / ( P2/(1-P2) );
+				OR= (a*d)/(b*c);
 				
-				
-				%rel_risk cell matrix:
-				rel_risk_cell{k,1}=[filename1];
-				rel_risk_cell{k,2}=[filename2];
-				x=num2cell(RR);
-				rel_risk_cell(k,K)=x;
-				
+% 				
+% 				%rel_risk cell matrix:
+% 				rel_risk_cell{k,1}=[filename1];
+% 				rel_risk_cell{k,2}=[filename2];
+% 				x=num2cell(RR);
+% 				rel_risk_cell(k,K)=x;
+% 				
 				%odds_ratio cell matrix:
 				odds_ratio_cell{k,1}=[filename1];
 				odds_ratio_cell{k,2}=[filename2];
