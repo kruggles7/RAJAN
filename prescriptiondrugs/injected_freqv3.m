@@ -14,10 +14,11 @@ grade=grade(5:7,:);
 cd ..
 cd results_091614
 cd NaN
-question_mat=importdata('Q79--NaN.txt', '\t');
+question_mat=importdata('Q31--NaN.txt', '\t');
 [r,c]=size(question_mat); 
 %question_mat=question_mat(:,2:c); 
 question_mat(:,1)=9; 
+question_mat=question_mat(5:7,:); 
 cd .. 
 cd ..
 cd ..
@@ -26,6 +27,10 @@ cd programs
 cd prescriptiondrugs
 cd results
 
+[r,c]=size(question_mat); 
+conf_mat=cell.empty; 
+n_mat=double.empty; 
+x_mat=double.empty; 
 
 for i=1:r
 %	total(i)=TOTAL(i,1);
@@ -76,8 +81,37 @@ for i=1:r
     total_10B(i)=nansum(w(intersect(index_10{i},index_total_b{i})));  
     total_11B(i)=nansum(w(intersect(index_11{i},index_total_b{i})));  
     total_12B(i)=nansum(w(intersect(index_12{i},index_total_b{i})));  
-
-    w=weight(i,:)'; 
+    
+    %make n_mat
+    n_mat(1,i)=total_ans(i); 
+    n_mat(2,i)=total_girls(i); 
+    n_mat(3,i)=total_boys(i); 
+	n_mat(4,i)=total_W{i};
+	n_mat(5,i)=total_B{i};
+	n_mat(6,i)=total_H{i};
+	n_mat(7,i)=total_O{i};
+	n_mat(8,i)=total_Wb(i);
+    n_mat(9,i)= total_Wg(i);
+    n_mat(10,i)=total_Bb(i); 
+    n_mat(11,i)=total_Bg(i);
+    n_mat(12,i)=total_Hb(i); 
+    n_mat(13,i)=total_Hg(i); 
+    n_mat(14,i)=total_Ob(i); 
+    n_mat(15,i)=total_Og(i);  
+    n_mat(16,i)=total_9(i); 
+    n_mat(17,i)=total_9B(i); 
+    n_mat(18,i)=total_9G(i);  
+    n_mat(19,i)=total_10(i); 
+    n_mat(20,i)=total_10B(i); 
+    n_mat(21,i)=total_10G(i);  
+    n_mat(22,i)=total_11(i); 
+    n_mat(23,i)=total_11B(i); 
+    n_mat(24,i)=total_11G(i);  
+    n_mat(25,i)=total_12(i);  
+    n_mat(26,i)=total_12B(i);  
+    n_mat(27,i)=total_12G(i);  
+    
+    
 	index_yesgirls{i}=intersect(index_yes{i},index_girls{i});
 	index_yesboys{i}=intersect(index_yes{i},index_boys{i});
 	yes_girls(i)=nansum(w(index_yesgirls{i}));
@@ -111,6 +145,37 @@ for i=1:r
     total_b(i)=total_B{i}; 
     total_h(i)=total_H{i}; 
     total_o(i)=total_O{i};
+    
+    
+    %make x_mat
+    x_mat(1,i)=total_yes(i); 
+    x_mat(2,i)=yes_boys(i); 
+    x_mat(3,i)=yes_girls(i); 
+	x_mat(4,i)=yes_W(i);
+	x_mat(5,i)=yes_B(i);
+	x_mat(6,i)=yes_H(i);
+	x_mat(7,i)=yes_O(i);
+	x_mat(8,i)=yes_WB(i);
+    x_mat(9,i)= yes_WG(i);
+    x_mat(10,i)=yes_BB(i); 
+    x_mat(11,i)=yes_BG(i);
+    x_mat(12,i)=yes_HB(i); 
+    x_mat(13,i)=yes_HG(i); 
+    x_mat(14,i)=yes_OB(i); 
+    x_mat(15,i)=yes_OG(i);  
+    x_mat(16,i)=yes_9(i); 
+    x_mat(17,i)=yes_9B(i); 
+    x_mat(18,i)=yes_9G(i);  
+    x_mat(19,i)=yes_10(i); 
+    x_mat(20,i)=yes_10B(i); 
+    x_mat(21,i)=yes_10G(i);  
+    x_mat(22,i)=yes_11(i); 
+    x_mat(23,i)=yes_11B(i); 
+    x_mat(24,i)=yes_11G(i);  
+    x_mat(25,i)=yes_12(i);  
+    x_mat(26,i)=yes_12B(i);  
+    x_mat(27,i)=yes_12G(i);  
+    
 end
 
 %put them all into a matrix as percent values:
@@ -177,3 +242,21 @@ end
     print (gcf, '-dpdf', 'PO_heatmap.pdf'); 
 
     close all
+    
+z=1.96; 
+[r,c]=size(n_mat); 
+for i=1:r
+    count=1; 
+    for j=1:c
+        x=x_mat(i,j); 
+        n=n_mat(i,j); 
+        p=x/n;  %x is the number of subjects saying "yes", n is the total subjects
+        upper=((p+z*sqrt(p*(1-p)/n))*100); 
+        lower=((p-z*sqrt(p*(1-p)/n))*100); 
+        upper=sprintf('%0.1f',round(upper*10)/10);
+        lower=sprintf('%0.1f',round(lower*10)/10);  
+        conf_mat{i+1,count}=[lower ', ' upper]; 
+        count=count+1; 
+    end
+end 
+

@@ -1,4 +1,8 @@
 
+GRADE=input('What grade are you interested in? (0=all, 1=9th, 2=10th, 3=11th, 4=12th): '); 
+SEX=input('What sex are you interested in? (0=all, 1=girls, 2=boys): '); 
+RACE=input('What race are you interested in? (0=all, 1=white, 2=black, 3=hispanic, 4=other): '); 
+
 cd ..
 cd ..
 cd data
@@ -51,36 +55,60 @@ for i=1:numel(xlabel_all);
     year=xlabel_all(i); 
     indx1=find(year==xlabel1); 
     indx_w=find(year==xlabel_w); 
+    %find demographics for that year-------------------------
+    [rg,cg]=size(grade); 
+    grade_=grade(i,2:cg); 
+    [rs,cs]=size(sex); 
+    sex_=sex(i,2:cs); 
+    [rr,cr]=size(race); 
+    race_=race(i,2:cr); 
+    %look at each other question for that year-----------------------
     for k=1:numel(others)
         question_mat2=importdata([others{k} '-cat-NaN.txt'], '\t'); 
         [r,c2]=size(question_mat2); 
         xlabel2=question_mat2(:,1); 
         indx2=find(year==xlabel2); 
-        
         question_mat2=question_mat2(:,2:c2); 
+        
         if numel(indx1)>0 && numel(indx2)>0
             years{i}=year; 
             for j=1:7
                 q1=question_mat(indx1,:); 
                 q2=question_mat2(indx2,:); 
+                
                 [r1,c1]=size(question_mat); 
                 [r2,c2]=size(question_mat2); 
                 min_c=min(c1,c2); 
                 q1_=q1(1,1:min_c);
                 q2_=q2(1,1:min_c); 
                 w=weight(indx_w,1:min_c); 
-
-                index_yes=find(q1_==j);
+                indx_final=1:min_c; %start with everything 
+                %look at indices for race, sex and grade
+                if GRADE>0
+                    indx_g=find(grade_==GRADE); 
+                    indx_final=intersect(indx_g, indx_final); 
+                end 
+                if SEX >0
+                    indx_s=find(sex_==SEX); 
+                    indx_final=intersect(indx_s, indx_final); 
+                end 
+                if RACE > 0
+                    indx_r=find(race_==RACE); 
+                    indx_final=intersect(indx_r, indx_final); 
+                end 
+                
+                w_final=w(indx_final); 
+                q1_final=q1_(indx_final); 
+                q2_final=q2_(indx_final); 
+                index_yes=find(q1_final==j);
                 if (other_do(k)==1)
-                    index_yes2=find(q2_>=other_mat(k)); 
+                    index_yes2=find(q2_final>=other_mat(k)); 
                 else 
-                    index_yes2=find(q2_==other_mat(k)); 
+                    index_yes2=find(q2_final==other_mat(k)); 
                 end 
 
-                index_missQ=find(q1_== 0 | q2_==0); %students who didn't answer the Q
-                index_nomiss=find(q1_>0 & q2_>other_total(k)); 
-             
-
+                index_missQ=find(q1_final== 0 | q2_final==0); %students who didn't answer the Q
+                index_nomiss=find(q1_final>0 & q2_final>other_total(k)); 
                 index_overlap=intersect(index_yes,index_yes2); %index of all all who participated in both behaviors
                 index_overlap2=intersect(index_overlap,index_nomiss); 
                 total_ans=nansum(w(index_nomiss)); 
@@ -114,6 +142,7 @@ for i=1:7
     c=c+2; 
 end 
 
+
 z=1.96; 
 [r,c]=size(n_mat); 
 for i=1:r
@@ -136,5 +165,13 @@ for i=1:r
         lower=sprintf('%0.1f',round(lower*10)/10); 
         conf_mat{i+1,count+1}=[lower ', ' upper]; 
         count=count+2; 
+    end 
+end 
+
+final_mat=cell.empty; 
+for i=7:14
+    for j=1:9
+        temp=sprintf('%0.1f',round(final_total(j,i)*10)/10);
+        final_mat{j,i}=[temp ' (' conf_mat{j+1,i+1} ')']; 
     end 
 end 
