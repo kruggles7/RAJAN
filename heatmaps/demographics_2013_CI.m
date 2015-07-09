@@ -2,11 +2,6 @@
 
     %resize and deal with the number of years in each
     [r,c]=size(question_mat);
-    label_=question_mat(:,1); 
-    question_mat=question_mat(:,2:c); 
-    sex=sex(:,2:c); 
-    race=race(:,2:c); 
-    weight=weight(:,2:c); 
     [r,c]=size(question_mat);
     minimum=1; 
     maximum=max(max(question_mat)); 

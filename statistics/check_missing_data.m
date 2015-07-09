@@ -1,9 +1,12 @@
 k=1; %counter for rows in rel_risk_cell and odds_ratio_cell
 
-files1=dir(fullfile('C:','Users','kruggles7','Documents','MATLAB', 'Rajan','NaN_results', '*.txt'));
-load quest_55.mat
-cd NaN_results
-missing=double.empty; 
+files1=dir(fullfile('C:','Users','kruggles7','Dropbox (Personal)','CDC', 'data', 'results_103114','NaN', '*.txt'));
+cd ..
+cd ..
+cd data
+cd results_103114
+cd NaN
+missing=cell.empty; 
 P=length(files1);
 for p=1:P
 	quest_1=importdata(files1(p).name, '\t');
@@ -22,17 +25,14 @@ for p=1:P
         end  
     end 
     ct=str2num(ct);
-    indx=find(quest_55==ct); 
-    if numel(indx)>0
-        [r,c]=size(quest_1); 
-        missing(k,1)=ct; 
-        for i=1:r
-            indx_t=find(isnan(quest_1(i,2:c))~=1); 
-            total=numel(indx_t); 
-            indx_m=find(quest_1(i,2:c)==9); 
-            miss=numel(indx_m); 
-            missing(k,i+1)=(miss/total)*100; 
-        end 
-        k=k+1; 
+    [r,c]=size(quest_1); 
+    missing{k,1}=filename1; 
+    for i=1:r
+        indx_t=find(isnan(quest_1(i,2:c))==0); 
+        total=numel(indx_t); 
+        indx_m=find(quest_1(i,2:c)==9); 
+        miss=numel(indx_m); 
+        missing{k,i+1}=(miss/total)*100; 
     end 
+    k=k+1; 
 end

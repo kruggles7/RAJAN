@@ -16,39 +16,42 @@ race=importdata('race-NaN.txt', '\t');
 cd ..
 cd matlab
 
-
-files1=dir(fullfile('/ifs/data/proteomics/projects/cdc/matlab/results_103114/NaN/', '*.txt')); 
+k=1; %counter for rows in rel_risk_cell and odds_ratio_cell
+CAT=2; %20 or more times 
+files1=dir(fullfile('/ifs/data/proteomics/projects/cdc/matlab/results_053015/cat/', '*.txt')); 
 load reverse_code_091914
-
+R=1; %WHITE 
 P=length(files1);
-for R=1:3 %race
-    for G=1:2 %gender
-        k=1; %counter for rows in rel_risk_cell and odds_ratio_cell
-        cd results_103114
-        cd NaN
-        for p=1:P %question
-            files1(p).name;
-            quest_1=importdata(files1(p).name, '\t');
-            filename1='';
-            a1=char(files1(p).name);
-            b1=strfind(a1,'-');
-            for q=1:(b1(1)-1)
-                c1=a1(q);
-                filename1=[filename1 c1];
-            end
-            ct=[]; 
-            for q=2:(b1(1)-1)
-                c1=a1(q) ;
-                if c1~=0
-                    ct=[ct c1]; 
-                end  
-            end 
-            ct=str2num(ct);
-            q1_RC=reverse_code(ct,1); 
-
+for G=1:2%gender
+    for p=1:P %question
+        cd results_053015
+        cd cat
+        files1(p).name;
+        quest_1=importdata(files1(p).name, '\t');
+        filename1='';
+        a1=char(files1(p).name);
+        b1=strfind(a1,'-');
+        for q=1:(b1(1)-1)
+            c1=a1(q);
+            filename1=[filename1 c1];
+        end
+        ct=[]; 
+        for q=2:(b1(1)-1)
+            c1=a1(q) ;
+            if c1~=0
+                ct=[ct c1]; 
+            end  
+        end 
+        ct=str2num(ct);
+        q1_RC=reverse_code(ct,1); 
+        cd ..
+        cd ..
+        if (ct == 78) %tanning 
             %filename2
-            files2=dir(fullfile('/ifs/data/proteomics/projects/cdc/matlab/results_103114/NaN/', '*.txt'));
+            files2=dir(fullfile('/ifs/data/proteomics/projects/cdc/matlab/results_053015/NaN/', '*.txt'));
             N=length(files2);
+            cd results_053015
+            cd NaN
             for n=1:N
                 quest_2=importdata(files2(n).name, '\t');
                 filename2='';
@@ -102,38 +105,24 @@ for R=1:3 %race
                     for i=1:r
                         %Q1:
                         index_final{i}=find(race(i,:)== R & sex(i,:)==G );
-
-                        if q1_RC==1
-                            index_no{i}=find(quest_1F(i,:)==1); %students who answered yes to Q1
-                            index_yes{i}=find(quest_1F(i,:)==0); %students who answered no to Q1
-                            index_yes_1{i}=intersect(index_yes{i},index_final{i});
-                            index_no_1{i}=intersect(index_no{i},index_final{i});
-                            index_miss{i}=find(quest_1F(i,:)==9); %students who didn't answer Q1  
-                            index_miss_1{i}=intersect(index_miss{i}, index_final{i}); 
-                        else 
-                            index_yes{i}=find(quest_1F(i,:)==1); %students who answered yes to Q1
-                            index_no{i}=find(quest_1F(i,:)==0); %students who answered no to Q1
-                            index_yes_1{i}=intersect(index_yes{i},index_final{i});
-                            index_no_1{i}=intersect(index_no{i},index_final{i});
-                            index_miss{i}=find(quest_1F(i,:)==9); %students who didn't answer Q1
-                            index_miss_1{i}=intersect(index_miss{i}, index_final{i}); 
-                            
-                        end 
+                        index_yes{i}=find(quest_1F(i,:)>=CAT); %students who answered yes to Q1
+                        index_yes_1{i}=intersect(index_yes{i},index_final{i});
+                        index_no{i}=find(quest_1F(i,:)<CAT & quest_1F(i,:)>0); %students who answered no to Q1
+                        index_no_1{i}=intersect(index_no{i},index_final{i});
+                        index_miss_1{i}=find(quest_1F(i,:)==0); %students who didn't answer Q1  
                         %Q2:
                         if q2_RC==1
                             index_no{i}=find(quest_2F(i,:)==1);
                             index_yes{i}=find(quest_2F(i,:)==0);
                             index_yes_2{i}=intersect(index_yes{i},index_final{i});
                             index_no_2{i}=intersect(index_no{i},index_final{i});
-                            index_miss{i}=find(quest_2F(i,:)==9);
-                            index_miss_2{i}=intersect(index_miss{i}, index_final{i}); 
+                            index_miss_2{i}=find(quest_2F(i,:)==9);
                         else 
                             index_yes{i}=find(quest_2F(i,:)==1);
                             index_no{i}=find(quest_2F(i,:)==0);
                             index_yes_2{i}=intersect(index_yes{i},index_final{i});
                             index_no_2{i}=intersect(index_no{i},index_final{i});
-                            index_miss{i}=find(quest_2F(i,:)==9);
-                            index_miss_2{i}=intersect(index_miss{i}, index_final{i}); 
+                            index_miss_2{i}=find(quest_2F(i,:)==9);
                         end 
 
                         index_yes_both{i}=intersect(index_yes_1{i}, index_yes_2{i});  %students who said yes to both Qs
@@ -186,38 +175,20 @@ for R=1:3 %race
                     k=k+1;	
                 end
             end
+            cd ..
+            cd ..
         end
-
-        cd ..
-        cd ..
-        cd OR_results
-        if R==1
-            if G==1
-                save('OR_2013_WHITE_GIRLS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_WHITE_GIRLS', 'OR_CI'); 
-            elseif G==2
-                save('OR_2013_WHITE_BOYS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_WHITE_BOYS', 'OR_CI'); 
-            end      
-        elseif R==2
-            if G==1
-                save('OR_2013_BLACK_GIRLS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_BLACK_GIRLS', 'OR_CI'); 
-            elseif G==2
-                save('OR_2013_BLACK_BOYS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_BLACK_BOYS', 'OR_CI'); 
-            end   
-        elseif R==3
-            if G==1
-                save('OR_2013_HISPANIC_GIRLS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_HISPANIC_GIRLS', 'OR_CI'); 
-            elseif G==2
-                save('OR_2013_HISPANIC_BOYS', 'odds_ratio_cell'); 
-                save('OR_CI_2013_HISPANIC_BOYS', 'OR_CI'); 
-            end   
-        end 
-        OR_CI=cell.empty; 
-        odds_ratio_cell=cell.empty; 
-        cd ..
     end 
+
+    cd OR_results
+    if R==1
+        if G==1
+            save('OR_2013_WHITE_GIRLS_Q78', 'odds_ratio_cell'); 
+            save('OR_CI_2013_WHITE_GIRLS_Q78', 'OR_CI'); 
+        elseif G==2
+            save('OR_2013_WHITE_BOYS_Q78', 'odds_ratio_cell'); 
+            save('OR_CI_2013_WHITE_BOYS_Q78', 'OR_CI'); 
+        end      
+    end
+    cd ..
 end 
